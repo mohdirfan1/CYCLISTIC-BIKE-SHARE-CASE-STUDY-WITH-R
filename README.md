@@ -262,7 +262,7 @@ aggregate(all_trips_v2$ride_length ~ all_trips_v2$member_casual + all_trips_v2$d
 
 ![Screenshot (177)](https://github.com/mohdirfan1/CYCLISTIC-BIKE-SHARE-CASE-STUDY-WITH-R/assets/107385987/9f17a24f-67e0-4a12-b84d-4efe8dc4935c)
 
-# Let's visualize the number of rides by rider type
+### Let's visualize the number of rides by rider type
 
 ```
 all_trips_v2 %>% 
@@ -276,5 +276,56 @@ all_trips_v2 %>%
 ```
 
 ![Rplot01](https://github.com/mohdirfan1/CYCLISTIC-BIKE-SHARE-CASE-STUDY-WITH-R/assets/107385987/3bef17c9-2444-4ef9-8c5c-ebcbaca5fca1)
+
+
+**From the above graph, it is observed that customer riders have the highest number of rides on the weekend(saturday and sunday) compared to the other days while subscriber are quite consistent but they have the lowest number of rides on the weekend.**
+
+### Let's create a visualization for average duration
+
+```
+all_trips_v2 %>% 
+  mutate(weekday = wday(started_at, label = TRUE)) %>% 
+  group_by(member_casual, weekday) %>% 
+  summarise(number_of_rides = n()
+            ,average_duration = mean(ride_length)) %>% 
+  arrange(member_casual, weekday)  %>% 
+  ggplot(aes(x = weekday, y = average_duration, fill = member_casual)) +
+  geom_col(position = "dodge")
+```
+![Rplot04](https://github.com/mohdirfan1/CYCLISTIC-BIKE-SHARE-CASE-STUDY-WITH-R/assets/107385987/3e46129c-cddd-4061-88a2-3ec6efdb7fd8)
+
+**From the above graph, we can observe that customer riders ride for a longer time during the week with the highest ride on the weekends while subscriber drive at a consistent pace during the week with the highest rides on the weekend.**
+
+**Let's visualize the total rides taken by subscriber and customer by month**
+
+```
+all_trips_v2 %>% 
+  mutate(weekday = wday(started_at, label = TRUE)) %>% 
+  group_by(member_casual, month) %>% 
+  summarise(number_of_rides = n()
+            ,average_duration = mean(ride_length)) %>% 
+  arrange(member_casual, month)  %>% 
+  ggplot(aes(x = month, y = number_of_rides, fill = member_casual)) +
+  labs(title ="Total rides by Members and Casual riders by Month") +
+  theme(axis.text.x = element_text(angle = 45)) +
+  geom_col(width=0.5, position = position_dodge(width=0.5)) +
+  scale_y_continuous(labels = function(x) format(x, scientific = FALSE))
+  geom_col(position = "dodge")
+```
+
+
+
+![Rplot05](https://github.com/mohdirfan1/CYCLISTIC-BIKE-SHARE-CASE-STUDY-WITH-R/assets/107385987/b4ac16e9-2506-4db6-8bf2-29070977c1f6)
+
+**From the above graph we can observe that subscriber had higher number of rides all through the year except in June, July and August where customer riders took more rides.**
+
+
+## Conclusion
+*  Subscriber have more bikes compared to customer riders.
+*  We have more Subscriber riding in all months except the summer months (June,July and August) where we have more customer riders.
+* Customer riders go farther in terms of distance.
+* Customer riders travel for a longer time period.
+* Subscriber ride less on the weekend compared to casual riders.
+
 
 
